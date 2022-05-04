@@ -20,7 +20,7 @@ set_time_limit(0);
 $sql = new \mysqli(DB_HOST, DB_LOGIN, DB_PASS);
 $sql->query('SET NAMES utf8');
 
-$raids = $sql->query("
+$devices = $sql->query("
 SELECT uuid AS name, UNIX_TIMESTAMP() - last_seen AS diff 
 FROM " . DB_NAME . ".device
 WHERE UNIX_TIMESTAMP() - last_seen > " . TIME_TO_RESTART . "
@@ -30,7 +30,7 @@ ORDER BY uuid
 
 $messages = '';
 
-while ($row = $raids->fetch_assoc()) {
+while ($row = $devices->fetch_assoc()) {
 	$hours = (int) ($row['diff'] / 3600);
 	$minutes = (int) (($row['diff'] - $hours * 3600) / 60);
 	$messages .= $row['name'] . ' RDM ' . str_pad($hours, 2, 0, STR_PAD_LEFT) . ':' . str_pad($minutes, 2, 0, STR_PAD_LEFT) . PHP_EOL;
